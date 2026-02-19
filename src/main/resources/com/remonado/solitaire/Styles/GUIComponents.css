@@ -1,0 +1,25 @@
+.Borders {
+    -fx-border-color: black;
+    -fx-border-width: 2;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 8, 0.3, 0, 2);
+    -fx-cursor: hand;
+}
+.solitaireBG {
+    -fx-background-image: url("../Assets/images/bg.png");
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+}
+.bordersColor {
+    /*-fx-background-image: url("../Assets/images/bdbg.png");*/
+    /*-fx-border-color: black;*/
+    /*-fx-background-color: "#501203";*/
+
+
+    -fx-border-width: 2;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+}
+
