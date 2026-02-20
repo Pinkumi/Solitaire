@@ -26,7 +26,7 @@ public class Menu extends VBox {
 
         imgStart.getStyleClass().add("menuButton");
         imgExit.getStyleClass().add("menuButton");
-        imgStart.setOnMouseClicked(e -> m.showWin());
+        imgStart.setOnMouseClicked(e -> m.startGame());
         imgExit.setOnMouseClicked(e -> Platform.exit());
         this.getChildren().addAll(tittle,imgStart,imgExit);
         this.setAlignment(Pos.CENTER);

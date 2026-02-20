@@ -7,8 +7,8 @@ import com.remonado.solitaire.solitaire.SolitaireGame;
 import javafx.geometry.Bounds;
 
 public class Controller {
-    SolitaireGame game;
-    SolitaireGUI gui;
+    private SolitaireGame game;
+    private SolitaireGUI gui;
     public Controller(SolitaireGame game, SolitaireGUI gui) {
         this.game = game;
         game.getDrawPile().setCuantasCartasSeEntregan(1);
@@ -16,6 +16,7 @@ public class Controller {
         
 
     }
+
     public void drop(CardView card) {
         boolean colisiono = false;
         Bounds cardBounds = card.localToScene(card.getBoundsInLocal());

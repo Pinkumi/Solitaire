@@ -117,7 +117,6 @@ public class SolitaireGame {
         TableauDeck fuente = tableau.get(numero-1);
         CartaInglesa carta = fuente.verUltimaCarta();
         if (moveCartaToFoundation(carta)) {
-            System.out.println("SI SE PUDO MOVER");
             fuente.removerUltimaCarta();
             movimientoRealizado = true;
         }
