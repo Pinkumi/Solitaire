@@ -14,10 +14,6 @@ public class TableauView extends ElementeView {
         this.tDeck = tDeck;
         this.control = control;
         this.idx = idx;
-
-//        setMinWidth(120);
-//        setMaxWidth(160);
-
     }
     public int getIdx() {
         return idx;

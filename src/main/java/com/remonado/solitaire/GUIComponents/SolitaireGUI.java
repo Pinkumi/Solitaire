@@ -1,5 +1,6 @@
 package com.remonado.solitaire.GUIComponents;
 import com.remonado.solitaire.Controller;
+import com.remonado.solitaire.Main;
 import com.remonado.solitaire.solitaire.*;
 import javafx.scene.layout.*;
 import javafx.stage.Screen;
@@ -17,7 +18,10 @@ public class SolitaireGUI extends BorderPane {
     private Pane  paneMiddle, paneBottom, paneFoundation;
     private BorderPane paneTop;
     private StackPane root;
-    public SolitaireGUI() {
+    private Pane animMask;
+    private Main main;
+    public SolitaireGUI(Main main) {
+        this.main = main;
         this.getStyleClass().addAll("solitaireBG");
         solitaireGame = new SolitaireGame();
         control =  new Controller(solitaireGame,this);
@@ -34,15 +38,20 @@ public class SolitaireGUI extends BorderPane {
         wasteView = null;
         drawView = null;
         initializeGUI();
+        animMask = new Pane();
+        animMask.setMouseTransparent(true);
+        this.getChildren().add(animMask);
+
         setElements();
         addElements();
         drawAll();
     }
 
     public void gameOver(){
-        playWinAnimation();
+        main.showWin();
+
     }
-    private void playWinAnimation(){
+    private void playWinAnimation(){ //Funcion falla, explota por sobrecarga de objetos jiji
         for(int i = 0; i < foundationViews.size(); i++){
             FoundationView fv = foundationViews.get(i);
             double x = fv.localToScene(fv.getBoundsInLocal()).getCenterX();
@@ -51,7 +60,7 @@ public class SolitaireGUI extends BorderPane {
             CardView cv = fv.getLastCard();
             cv.setLayoutX(x);
             cv.setLayoutY(y);
-            for(int j =0; i< 100; i++){
+            for(int j =0; j< 100; j++){
                 CardView cv1 = new CardView(cv.getCard());
                 if(i % 2 == 0) x -= velx; else x += velx;
                 velx *= 0.8;
@@ -59,7 +68,7 @@ public class SolitaireGUI extends BorderPane {
                 cv.setLayoutX(x);
                 cv.setLayoutY(y);
                 try {
-                    Thread.sleep(100); // 1000 ms = 1 segundo
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
