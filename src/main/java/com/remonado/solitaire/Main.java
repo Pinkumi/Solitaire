@@ -29,7 +29,6 @@ public class Main extends Application {
         root = new StackPane();
         winScreen = new WinScreen(this);
         menu = new Menu(this);
-
         root.getChildren().add(menu);
         root.setAlignment(Pos.CENTER);
         Scene scene = new Scene(root, 1800, 850);

@@ -2,6 +2,9 @@ package com.remonado.solitaire.solitaire;
 
 import com.remonado.solitaire.DeckOfCards.CartaInglesa;
 import com.remonado.solitaire.DeckOfCards.Palo;
+import com.remonado.solitaire.solitaire.movimientos.*;
+
+import com.remonado.solitaire.tools.Pile;
 
 import java.util.ArrayList;
 /**
@@ -16,12 +19,15 @@ public class SolitaireGame {
     FoundationDeck lastFoundationUpdated;
     DrawPile drawPile;
     WastePile wastePile;
+    private Pile<Movement> movementPile;
+    private FoundationDeck ultimoFoundModificado = null;
 
     public SolitaireGame() {
         drawPile = new DrawPile();
         wastePile = new WastePile();
         createTableaux();
         createFoundations();
+        movementPile = new Pile<>(300);
         //wastePile.addCartas(drawPile.retirarCartas());
     }
 
@@ -29,7 +35,7 @@ public class SolitaireGame {
      * Move cards from Waste pile to Draw Pile.
      */
     public void reloadDrawPile() {
-        ArrayList<CartaInglesa> cards = wastePile.emptyPile();
+        Pile<CartaInglesa> cards = wastePile.emptyPile();
         drawPile.recargar(cards);
     }
 
@@ -37,15 +43,9 @@ public class SolitaireGame {
      * Move cards from Draw pile to Waste Pile.
      */
     public void drawCards() {
-        ArrayList<CartaInglesa> cards = drawPile.retirarCartas();
+        Pile<CartaInglesa> cards = drawPile.retirarCartas();
         wastePile.addCartas(cards);
     }
-    public void drawCard() {
-        ArrayList<CartaInglesa> cards = drawPile.getCartas(1);
-        wastePile.addCartas(cards);
-    }
-
-
     /**
      * Tomar la carta del Waste pile y ponerla en el tableau
      *
@@ -94,6 +94,8 @@ public class SolitaireGame {
                         // Voltear la carta que se destapa en el Tableau
                         fuente.verUltimaCarta().makeFaceUp();
                     }
+                    movementPile.push(new MovementT2T(fuente,destino));
+                    System.out.println("Se creo un movimiento de tipo T2T");
                     movimientoRealizado = true;
                 }
             }
@@ -116,8 +118,11 @@ public class SolitaireGame {
 
         TableauDeck fuente = tableau.get(numero-1);
         CartaInglesa carta = fuente.verUltimaCarta();
+        //MovementT2F movementT2F = new MovementT2F(fuente);
         if (moveCartaToFoundation(carta)) {
             fuente.removerUltimaCarta();
+            movementPile.push(new MovementT2F(fuente, lastFoundationUpdated));
+            System.out.println("Se creo un movimiento de tipo T2F");
             movimientoRealizado = true;
         }
         return movimientoRealizado;
@@ -136,9 +141,21 @@ public class SolitaireGame {
         if (moveCartaToTableau(carta, tableau)) {
             // si es movimiento válido, elimina la carta de la pila
             carta = wastePile.getCarta();
+            movementPile.push(new MovementW2T(wastePile,tableau));
+            System.out.println("Se creo un movimiento de tipo W2T");
             movimientoRealizado = true;
         }
         return movimientoRealizado;
+    }
+
+    /**
+     * Regresa el ulrimo movimiento
+     *
+     *
+     */
+    public void undo(){
+        Movement m = movementPile.pop();
+        if(m!=null)m.undo();
     }
 
     /**
@@ -153,6 +170,8 @@ public class SolitaireGame {
         if (moveCartaToFoundation(carta)) {
             // si es movimiento válido, elimina la carta de la pila
             carta = wastePile.getCarta();
+            movementPile.push(new MovementW2F(wastePile, lastFoundationUpdated));
+            System.out.println("Se creo un movimiento de tipo W2F");
             movimientoRealizado = true;
         }
         return movimientoRealizado;
@@ -178,8 +197,9 @@ public class SolitaireGame {
     private boolean moveCartaToFoundation(CartaInglesa carta) {
         int cualFoundation = carta.getPalo().ordinal();
         FoundationDeck destino = foundation.get(cualFoundation);
+        boolean movimientoRealizado = destino.agregarCarta(carta);
         lastFoundationUpdated = destino;
-        return destino.agregarCarta(carta);
+        return movimientoRealizado;
     }
 
     /**

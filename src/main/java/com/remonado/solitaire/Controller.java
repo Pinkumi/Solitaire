@@ -7,9 +7,10 @@ import com.remonado.solitaire.solitaire.SolitaireGame;
 import javafx.geometry.Bounds;
 
 public class Controller {
-    private SolitaireGame game;
-    private SolitaireGUI gui;
-    public Controller(SolitaireGame game, SolitaireGUI gui) {
+    SolitaireGame game;
+    SolitaireGUI gui;
+
+    public Controller(SolitaireGame game, SolitaireGUI gui) { //Recibe la interfaz y el modelo
         this.game = game;
         game.getDrawPile().setCuantasCartasSeEntregan(1);
         this.gui = gui;
@@ -17,6 +18,16 @@ public class Controller {
 
     }
 
+    public void undo(){
+        game.undo();
+        gui.drawAll();
+    }
+
+    /**
+     * Coloca la carga desplazada en el elemento en el que se deposito
+     *
+     * @param card   que se movio a algun lugar.
+     */
     public void drop(CardView card) {
         boolean colisiono = false;
         Bounds cardBounds = card.localToScene(card.getBoundsInLocal());
@@ -71,7 +82,9 @@ public class Controller {
         }
 
     }
-
+    /**
+     * Toma una carta del DrawPile para el WastePile  y la dibuja
+     */
     public void drawCard() {
         if(game.getDrawPile().hayCartas()) {
             game.drawCards();

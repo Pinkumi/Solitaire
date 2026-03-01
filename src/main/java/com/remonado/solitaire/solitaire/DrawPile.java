@@ -1,6 +1,7 @@
 package com.remonado.solitaire.solitaire;
 
 import com.remonado.solitaire.DeckOfCards.CartaInglesa;
+import com.remonado.solitaire.tools.Pile;
 
 import java.util.ArrayList;
 
@@ -10,7 +11,8 @@ import java.util.ArrayList;
  * @version 2025
  */
 public class DrawPile {
-    private ArrayList<CartaInglesa> cartas;
+    private Pile<CartaInglesa> cartas;
+   // private Pile<CartaInglesa> cards;
     private int cuantasCartasSeEntregan = 3;
 
     public DrawPile() {
@@ -47,7 +49,7 @@ public class DrawPile {
     public ArrayList<CartaInglesa> getCartas(int cantidad) {
         ArrayList<CartaInglesa> retiradas = new ArrayList<>();
         for (int i = 0; i < cantidad; i++) {
-            retiradas.add(cartas.remove(0));
+            retiradas.add(cartas.pop());
         }
         return retiradas;
     }
@@ -58,14 +60,14 @@ public class DrawPile {
      * que se configuró inicialmente.
      * @return Cartas retiradas.
      */
-    public ArrayList<CartaInglesa> retirarCartas() {
-        ArrayList<CartaInglesa> retiradas = new ArrayList<>();
-        int maximoARetirar = cartas.size() < cuantasCartasSeEntregan ? cartas.size() : cuantasCartasSeEntregan;
+    public Pile<CartaInglesa> retirarCartas() {
+        Pile<CartaInglesa> retiradas = new Pile<>(54);
+        int maximoARetirar = Math.min(cartas.getSize(), cuantasCartasSeEntregan);
 
         for (int i = 0; i < maximoARetirar; i++) {
-            CartaInglesa retirada = cartas.remove(0);
+            CartaInglesa retirada = cartas.pop();
             retirada.makeFaceUp();
-            retiradas.add(retirada);
+            retiradas.push(retirada);
         }
         return retiradas;
     }
@@ -75,13 +77,13 @@ public class DrawPile {
      * @return true si hay cartas, false si no.
      */
     public boolean hayCartas() {
-        return cartas.size() > 0;
+        return !cartas.pila_vacia();
     }
 
     public CartaInglesa verCarta() {
         CartaInglesa regresar = null;
-        if (!cartas.isEmpty()) {
-            regresar = cartas.getLast();
+        if (!cartas.pila_vacia()) {
+            regresar = cartas.pop();
         }
         return regresar;
     }
@@ -90,16 +92,22 @@ public class DrawPile {
      * para que no se vean las caras.
      * @param cartasAgregar cartas que se agregan
      */
-    public void recargar(ArrayList<CartaInglesa> cartasAgregar) {
+    public void recargar(Pile<CartaInglesa> cartasAgregar) {
         cartas = cartasAgregar;
-        for (CartaInglesa aCarta : cartas) {
-            aCarta.makeFaceDown();
+        Pile<CartaInglesa> tempPile = new Pile<>(54);
+        while(!cartas.pila_vacia()) {
+            CartaInglesa carta = cartas.pop();
+            carta.makeFaceDown();
+            tempPile.push(carta);
+        }
+        while(!tempPile.pila_vacia()) {
+            cartas.push(tempPile.pop());
         }
     }
 
     @Override
     public String toString() {
-        if (cartas.isEmpty()) {
+        if (cartas.pila_vacia()) {
             return "-E-";
         }
         return "@";

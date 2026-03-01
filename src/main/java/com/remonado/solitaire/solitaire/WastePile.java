@@ -1,6 +1,7 @@
 package com.remonado.solitaire.solitaire;
 
 import com.remonado.solitaire.DeckOfCards.CartaInglesa;
+import com.remonado.solitaire.tools.Pile;
 
 import java.util.ArrayList;
 /**
@@ -11,21 +12,27 @@ import java.util.ArrayList;
  * @version (2025-2)
  */
 public class WastePile {
-    private ArrayList<CartaInglesa> cartas;
-
+    //private ArrayList<CartaInglesa> cartas;
+    private Pile<CartaInglesa> cartas;
     public WastePile() {
-        cartas = new ArrayList<>();
+        cartas = new Pile<>(52);
     }
 
-    public void addCartas(ArrayList<CartaInglesa> nuevas) {
-        cartas.addAll(nuevas);
+    public void addCartas(Pile<CartaInglesa> nuevas) {
+        while(!nuevas.pila_vacia()){
+            cartas.push(nuevas.pop());
+        }
     }
-
-    public ArrayList<CartaInglesa> emptyPile() {
-        ArrayList<CartaInglesa> pile = new ArrayList<>();
-        if (!cartas.isEmpty()) {
-            pile.addAll(cartas);
-            cartas = new ArrayList<>();
+    public void addCarta(CartaInglesa c) {
+        cartas.push(c);
+    }
+    public Pile<CartaInglesa> emptyPile() {
+        Pile<CartaInglesa> pile = new Pile<>(52);
+        if (!cartas.pila_vacia()) {
+            while(!cartas.pila_vacia()) {
+                pile.push(cartas.pop());
+            }
+            cartas = new Pile<>(52);
         }
         return pile;
     }
@@ -36,15 +43,15 @@ public class WastePile {
      */
     public CartaInglesa verCarta() {
         CartaInglesa regresar = null;
-        if (!cartas.isEmpty()) {
-            regresar = cartas.getLast();
+        if (!cartas.pila_vacia()) {
+            regresar = cartas.peak();
         }
         return regresar;
     }
     public CartaInglesa getCarta() {
         CartaInglesa regresar = null;
-        if (!cartas.isEmpty()) {
-            regresar = cartas.removeLast();
+        if (!cartas.pila_vacia()) {
+            regresar = cartas.pop();
         }
         return regresar;
     }
@@ -52,10 +59,10 @@ public class WastePile {
     @Override
     public String toString() {
         StringBuilder stb = new StringBuilder();
-        if (cartas.isEmpty()) {
+        if (cartas.pila_vacia()) {
             stb.append("---");
         } else {
-            CartaInglesa regresar = cartas.getLast();
+            CartaInglesa regresar = cartas.pop();
             regresar.makeFaceUp();
             stb.append(regresar.toString());
         }
@@ -63,6 +70,6 @@ public class WastePile {
     }
 
     public boolean hayCartas() {
-        return !cartas.isEmpty();
+        return !cartas.pila_vacia();
     }
 }

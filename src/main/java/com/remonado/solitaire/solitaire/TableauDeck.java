@@ -14,7 +14,7 @@ import java.util.Iterator;
  */
 public class TableauDeck {
     ArrayList<CartaInglesa> cartas = new ArrayList<>();
-
+    ArrayList<CartaInglesa> ultimoBloqueCartas = new ArrayList<>();
     /**
      * Carga las cartas iniciales y voltea la última.
      *
@@ -75,9 +75,20 @@ public class TableauDeck {
         if (sePuedeAgregarCarta(carta)) {
             carta.makeFaceUp();
             cartas.add(carta);
+            ultimoBloqueCartas = new ArrayList<>();
+            ultimoBloqueCartas.add(carta);
             agregado = true;
         }
         return agregado;
+    }
+    public void regresarCarta(CartaInglesa carta) {
+        if(!cartas.isEmpty() && carta!=null){
+            cartas.getLast().makeFaceDown();
+            carta.makeFaceUp();
+        }
+        cartas.add(carta);
+        ultimoBloqueCartas = new ArrayList<>();
+        ultimoBloqueCartas.add(carta);
     }
 
     /**
@@ -98,7 +109,7 @@ public class TableauDeck {
      *
      * @return la carta que removió, null si estaba vacio
      */
-    CartaInglesa removerUltimaCarta() {
+    public CartaInglesa removerUltimaCarta() {
         CartaInglesa ultimaCarta = null;
         if (!cartas.isEmpty()) {
             ultimaCarta = cartas.getLast();
@@ -140,12 +151,34 @@ public class TableauDeck {
             if (sePuedeAgregarCarta(primera)) {
                 // se agrega todo el bloque
                 cartas.addAll(cartasRecibidas);
+                ultimoBloqueCartas =  cartasRecibidas;
                 resultado = true;
             }
         }
         return resultado;
     }
+    public void regresarBloqueDeCartas(ArrayList<CartaInglesa> cartasRecibidas) {
+        if(!cartas.isEmpty() && !cartasRecibidas.isEmpty()) cartas.getLast().makeFaceDown();
+        cartas.addAll(cartasRecibidas);
+        ultimoBloqueCartas =  cartasRecibidas;
+    }
 
+    /**
+     * Regresa el ultimo bloque de cartas agregado
+     *
+     * @return Array de cartas q fueron agregadas al ultimo
+     */
+
+    public ArrayList<CartaInglesa> getUltimasCartas() {
+        ArrayList<CartaInglesa> bloque = new ArrayList<>(ultimoBloqueCartas);
+        for (int i = 0; i < bloque.size(); i++) {
+            if (!cartas.isEmpty()) {
+                cartas.removeLast();
+            }
+        }
+        ultimoBloqueCartas.clear();
+        return bloque;
+    }
     /**
      * Indica si está vacío  el Tableau
      *

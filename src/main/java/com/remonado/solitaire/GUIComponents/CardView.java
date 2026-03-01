@@ -11,15 +11,15 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class CardView extends StackPane {
-    private ImageView cardView;
+public class CardView extends StackPane { //extiende de stackpane para usarlo como elemento grafico
+    private ImageView cardView; //Imagen de la carta
     private CartaInglesa card;
-    private final Rectangle clip = new Rectangle();
     private double xMovement;
     private double yMovement;
-    private boolean isOnTableau = false;
-    private int tableauIdx = 0;
-    public CardView(CartaInglesa carta) {
+    private boolean isOnTableau = false; //Indica si vendra de un tableau o desde el wastePile
+    private int tableauIdx = 0; //indica el indice del tableau, no se usa si isOnTableau = false
+
+    public CardView(CartaInglesa carta) { //cargamos una carta inglesa
         this.card = carta;
         cardView = new ImageView();
         //carta.makeFaceUp();
@@ -29,16 +29,17 @@ public class CardView extends StackPane {
         this.getStyleClass().addAll("card");
         this.getChildren().add(cardView);
         setMovement();
-
-
-
     }
+
+    /**
+     * @return true si esta dentro de un tableau
+     */
     public boolean isOnTableau() {
         return isOnTableau;
     }
-    public void setOnTableau(boolean onTableau) {
-        isOnTableau = onTableau;
-    }
+    /**
+     * @return indice del tableau en el que esta
+     */
     public int getTableauIdx(){
         if(!isOnTableau){
             return -1;
@@ -46,11 +47,16 @@ public class CardView extends StackPane {
             return tableauIdx;
         }
     }
+    /**
+     * @return true si esta dentro de un tableau
+     */
     public void setTableauIdx(int idx){
         tableauIdx = idx;
         isOnTableau = true;
     }
-
+    /**
+     * setea el movimiento
+     */
     private void setMovement() {
         setOnMousePressed((MouseEvent e) -> {
             xMovement =e.getSceneX()-getLayoutX();
@@ -62,6 +68,10 @@ public class CardView extends StackPane {
             toFront();
         });
     }
+    /**
+     * Dibuja la carta desde la ruta de la imagen o si esta volteada
+     *
+     */
     public void draw(){
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("file:src/main/resources/com/remonado/solitaire/Assets/images/");
@@ -99,11 +109,21 @@ public class CardView extends StackPane {
         cardView.setClip(null);
         cardView.setImage(image);
     }
+    /**
+     * Controla la accion de solar una carta dentro de otro elemento gráfico.
+     *
+     * @param c Controller donde se conectara con el modelo
+     */
     public void setReleased(Controller c){
         setOnMouseReleased((MouseEvent e) -> {
             c.drop(this);
         });
     }
+    /**
+     * Regresa el modelo al que esta ligado
+     *
+     * @return modelo de carta
+     */
     public CartaInglesa getCard() {
         return card;
     }

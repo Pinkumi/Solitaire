@@ -5,11 +5,15 @@ package com.remonado.solitaire.DeckOfCards;
  * @author (Cecilia Curlango Rosas)
  * @version (2025-2)
  */
+import com.remonado.solitaire.tools.Pile;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 public class Mazo {
-    private ArrayList<CartaInglesa> cartas = new ArrayList<>();
+    private Pile<CartaInglesa> cartas = new Pile<>(54);
 
     public Mazo() {
         llenar(); // crea todas las cartas, excluyendo Jokers
@@ -20,31 +24,38 @@ public class Mazo {
      * Obtiene todas las cartas del mazo.
      * @return
      */
-    public ArrayList<CartaInglesa> getCartas() {
+    public Pile<CartaInglesa> getCartas() {
         return cartas;
     }
 
     public CartaInglesa obtenerUnaCarta() {
-        if (cartas.size() > 0) {
-            return cartas.remove(0);
+        if (!cartas.pila_vacia()) {
+            return cartas.pop();
         }
         return null;
     }
     private void mezclar() {
-        Collections.shuffle(cartas);
+        ArrayList<CartaInglesa> cartasLista = new ArrayList<>();
+        while (!cartas.pila_vacia()) {
+            cartasLista.add(cartas.pop());
+        }
+        Collections.shuffle(cartasLista);
+        for (CartaInglesa c : cartasLista) {
+            cartas.push(c);
+        }
     }
 
     private void llenar() {
         for (int i = 2; i <=14 ; i++) {
             for (Palo palo : Palo.values()) {
                 CartaInglesa c = new CartaInglesa(i,palo, palo.getColor());
-                cartas.add(c);
+                cartas.push(c);
             }
         }
     }
 
     public void ordenar() {
-        Collections.sort(cartas);
+        Arrays.sort(cartas.getCartas());
     }
 
     @Override
