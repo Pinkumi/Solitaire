@@ -35,8 +35,10 @@ public class SolitaireGame {
      * Move cards from Waste pile to Draw Pile.
      */
     public void reloadDrawPile() {
-        Pile<CartaInglesa> cards = wastePile.emptyPile();
-        drawPile.recargar(cards);
+        if (wastePile.hayCartas()) {
+            Pile<CartaInglesa> cards = wastePile.emptyPile();
+            drawPile.recargar(cards);
+        }
     }
 
     /**
@@ -71,6 +73,7 @@ public class SolitaireGame {
      */
     public boolean moveTableauToTableau(int tableauFuente, int tableauDestino) {
         boolean movimientoRealizado = false;
+        boolean seVolteoCartaAnt = false;
         TableauDeck fuente = tableau.get(tableauFuente - 1);
         if (!fuente.isEmpty()) {
             TableauDeck destino = tableau.get(tableauDestino - 1);
@@ -93,8 +96,9 @@ public class SolitaireGame {
                     if (!fuente.isEmpty()) {
                         // Voltear la carta que se destapa en el Tableau
                         fuente.verUltimaCarta().makeFaceUp();
+                        seVolteoCartaAnt = true;
                     }
-                    movementPile.push(new MovementT2T(fuente,destino));
+                    movementPile.push(new MovementT2T(fuente,destino,seVolteoCartaAnt,cartas));
                     System.out.println("Se creo un movimiento de tipo T2T");
                     movimientoRealizado = true;
                 }
@@ -115,13 +119,19 @@ public class SolitaireGame {
      */
     public boolean moveTableauToFoundation(int numero) {
         boolean movimientoRealizado = false;
-
+        boolean seVolteoCartaAnt = false;
         TableauDeck fuente = tableau.get(numero-1);
         CartaInglesa carta = fuente.verUltimaCarta();
         //MovementT2F movementT2F = new MovementT2F(fuente);
         if (moveCartaToFoundation(carta)) {
+            if (fuente.getCards().size()>1) {
+                CartaInglesa abajo = fuente.getCards().get(fuente.getCards().size() - 2);
+                if (!abajo.isFaceup()) {
+                    seVolteoCartaAnt = true;
+                }
+            }
             fuente.removerUltimaCarta();
-            movementPile.push(new MovementT2F(fuente, lastFoundationUpdated));
+            movementPile.push(new MovementT2F(fuente, lastFoundationUpdated,seVolteoCartaAnt));
             System.out.println("Se creo un movimiento de tipo T2F");
             movimientoRealizado = true;
         }
@@ -167,6 +177,7 @@ public class SolitaireGame {
         boolean movimientoRealizado = false;
 
         CartaInglesa carta = wastePile.verCarta();
+       // if(carta == null)return false;
         if (moveCartaToFoundation(carta)) {
             // si es movimiento válido, elimina la carta de la pila
             carta = wastePile.getCarta();

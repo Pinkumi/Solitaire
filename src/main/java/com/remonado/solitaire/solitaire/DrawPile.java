@@ -93,15 +93,10 @@ public class DrawPile {
      * @param cartasAgregar cartas que se agregan
      */
     public void recargar(Pile<CartaInglesa> cartasAgregar) {
-        cartas = cartasAgregar;
-        Pile<CartaInglesa> tempPile = new Pile<>(54);
-        while(!cartas.pila_vacia()) {
-            CartaInglesa carta = cartas.pop();
+        while(!cartasAgregar.pila_vacia()) {
+            CartaInglesa carta = cartasAgregar.pop();
             carta.makeFaceDown();
-            tempPile.push(carta);
-        }
-        while(!tempPile.pila_vacia()) {
-            cartas.push(tempPile.pop());
+            cartas.push(carta);
         }
     }
 

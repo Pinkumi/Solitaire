@@ -1,8 +1,10 @@
 package com.remonado.solitaire.solitaire;
 
+import com.remonado.solitaire.DeckOfCards.Carta;
 import com.remonado.solitaire.DeckOfCards.CartaInglesa;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 
 /**
@@ -14,7 +16,7 @@ import java.util.Iterator;
  */
 public class TableauDeck {
     ArrayList<CartaInglesa> cartas = new ArrayList<>();
-    ArrayList<CartaInglesa> ultimoBloqueCartas = new ArrayList<>();
+  //  ArrayList<CartaInglesa> ultimoBloqueCartas = new ArrayList<>();
     /**
      * Carga las cartas iniciales y voltea la última.
      *
@@ -75,20 +77,22 @@ public class TableauDeck {
         if (sePuedeAgregarCarta(carta)) {
             carta.makeFaceUp();
             cartas.add(carta);
-            ultimoBloqueCartas = new ArrayList<>();
-            ultimoBloqueCartas.add(carta);
+//            ultimoBloqueCartas = new ArrayList<>();
+//            ultimoBloqueCartas.add(carta);
             agregado = true;
         }
         return agregado;
     }
     public void regresarCarta(CartaInglesa carta) {
-        if(!cartas.isEmpty() && carta!=null){
-            cartas.getLast().makeFaceDown();
-            carta.makeFaceUp();
+        if(carta == null)return;
+        if(cartas.size() == 1) if(this.sePuedeAgregarCarta(carta))cartas.getLast().makeFaceDown();
+        else{
+            int contFaceUp =(int) cartas.stream().filter(Carta::isFaceup).count();
+            if(contFaceUp > 1) cartas.getLast().makeFaceDown();
         }
         cartas.add(carta);
-        ultimoBloqueCartas = new ArrayList<>();
-        ultimoBloqueCartas.add(carta);
+//        ultimoBloqueCartas = new ArrayList<>();
+//        ultimoBloqueCartas.add(carta);
     }
 
     /**
@@ -151,16 +155,22 @@ public class TableauDeck {
             if (sePuedeAgregarCarta(primera)) {
                 // se agrega todo el bloque
                 cartas.addAll(cartasRecibidas);
-                ultimoBloqueCartas =  cartasRecibidas;
+               // ultimoBloqueCartas =  cartasRecibidas;
                 resultado = true;
             }
         }
         return resultado;
     }
     public void regresarBloqueDeCartas(ArrayList<CartaInglesa> cartasRecibidas) {
-        if(!cartas.isEmpty() && !cartasRecibidas.isEmpty()) cartas.getLast().makeFaceDown();
+        if(cartas.size() == 1) if(this.sePuedeAgregarCarta(cartasRecibidas.getFirst()))cartas.getLast().makeFaceDown();
+        else{
+            int contFaceUp = 0;
+            for (CartaInglesa carta : cartas) {if(carta.isFaceup())contFaceUp++;}
+            if(contFaceUp > 1 ) cartas.getLast().makeFaceDown();
+        }
         cartas.addAll(cartasRecibidas);
-        ultimoBloqueCartas =  cartasRecibidas;
+       // ultimoBloqueCartas =  cartasRecibidas;
+
     }
 
     /**
@@ -169,16 +179,16 @@ public class TableauDeck {
      * @return Array de cartas q fueron agregadas al ultimo
      */
 
-    public ArrayList<CartaInglesa> getUltimasCartas() {
-        ArrayList<CartaInglesa> bloque = new ArrayList<>(ultimoBloqueCartas);
-        for (int i = 0; i < bloque.size(); i++) {
-            if (!cartas.isEmpty()) {
-                cartas.removeLast();
-            }
-        }
-        ultimoBloqueCartas.clear();
-        return bloque;
-    }
+//    public ArrayList<CartaInglesa> getUltimasCartas() {
+//        ArrayList<CartaInglesa> bloque = new ArrayList<>(ultimoBloqueCartas);
+//        for (int i = 0; i < bloque.size(); i++) {
+//            if (!cartas.isEmpty()) {
+//                cartas.removeLast();
+//            }
+//        }
+//        ultimoBloqueCartas.clear();
+//        return bloque;
+//    }
     /**
      * Indica si está vacío  el Tableau
      *
@@ -223,7 +233,19 @@ public class TableauDeck {
         }
         return ultimaCarta;
     }
-
+    /**
+     * remueve las cartas del Tableau a partir de incice.
+     * @return array de cartas a remover
+     */
+    public ArrayList<CartaInglesa> removeCartasDesde(int idx) {
+        ArrayList<CartaInglesa> cartasRegresar = new ArrayList<>();
+        int cantCartas = cartas.size()-idx;
+        for (int i = 0; i < cantCartas; i++) {
+            cartasRegresar.add(removerUltimaCarta());
+        }
+        Collections.reverse(cartasRegresar);
+        return cartasRegresar;
+    }
     public ArrayList<CartaInglesa> getCards() {
         return cartas;
     }

@@ -102,6 +102,6 @@ public class FoundationDeck {
 //        if (!cartas.pila_vacia()) {
 //            ultimaCarta = cartas.pop();
 //        }
-        return cartas.pop();
+        return cartas.peak();
     }
 }

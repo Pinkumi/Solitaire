@@ -3,7 +3,7 @@ package com.remonado.solitaire.solitaire.movimientos;
 import com.remonado.solitaire.DeckOfCards.CartaInglesa;
 
 public abstract class Movement {
-    private String movementType;
+    protected String movementType;
     protected CartaInglesa cardUsed;
     public Movement(String movementType) {
         this.movementType = movementType;

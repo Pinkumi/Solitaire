@@ -16,8 +16,8 @@ public class MovementW2T extends Movement{
         this.destino = destino;
     }
     public void undo() {
-        Pile<CartaInglesa> cards = new Pile<CartaInglesa>(destino.getUltimasCartas());
-        fuente.addCartas(cards);
+        System.out.println("Undo "+ movementType);
+        fuente.addCarta(destino.removerUltimaCarta());
     }
 
 }

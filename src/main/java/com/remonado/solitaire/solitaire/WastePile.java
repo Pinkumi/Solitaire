@@ -32,7 +32,7 @@ public class WastePile {
             while(!cartas.pila_vacia()) {
                 pile.push(cartas.pop());
             }
-            cartas = new Pile<>(52);
+            //cartas = new Pile<>(52);
         }
         return pile;
     }
@@ -62,7 +62,7 @@ public class WastePile {
         if (cartas.pila_vacia()) {
             stb.append("---");
         } else {
-            CartaInglesa regresar = cartas.pop();
+            CartaInglesa regresar = cartas.peak();
             regresar.makeFaceUp();
             stb.append(regresar.toString());
         }

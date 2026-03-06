@@ -8,7 +8,7 @@
 }
 .solitaireBG {
     -fx-background-image:
-            url("../Assets/images/fondo.jpg");
+            url("../Assets/images/bg.png");
 
     -fx-background-size: cover, cover;
     -fx-background-position: center center, center center;

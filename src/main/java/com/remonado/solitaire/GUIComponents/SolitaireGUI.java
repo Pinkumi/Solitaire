@@ -100,6 +100,7 @@ public class SolitaireGUI extends BorderPane {
         if(gui1 == -1 || gui2 == -1) foundationViews.forEach(FoundationView::draw);
         if(gui1>=0) tableauViews.get(gui1).draw();
         if(gui2>=0) tableauViews.get(gui2).draw();
+        //System.out.println(solitaireGame);
     }
     /**
      * Redibuja el tablero entero
