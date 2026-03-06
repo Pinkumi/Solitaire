@@ -28,13 +28,16 @@ public class WastePile {
     }
     public Pile<CartaInglesa> emptyPile() {
         Pile<CartaInglesa> pile = new Pile<>(52);
+        Pile<CartaInglesa> reverse =  new Pile<>(52);
         if (!cartas.pila_vacia()) {
             while(!cartas.pila_vacia()) {
                 pile.push(cartas.pop());
             }
-            //cartas = new Pile<>(52);
+            while(!pile.pila_vacia()) {
+                reverse.push(pile.pop());
+            }
         }
-        return pile;
+        return reverse;
     }
 
     /**

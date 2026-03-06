@@ -1,6 +1,6 @@
 package com.remonado.solitaire.tools;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class Pile<T>{
     private T[] pile;
