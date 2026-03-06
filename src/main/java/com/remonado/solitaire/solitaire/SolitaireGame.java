@@ -2,7 +2,7 @@ package com.remonado.solitaire.solitaire;
 
 import com.remonado.solitaire.DeckOfCards.CartaInglesa;
 import com.remonado.solitaire.DeckOfCards.Palo;
-import com.remonado.solitaire.solitaire.movimientos.*;
+//import com.remonado.solitaire.solitaire.movimientos.*;
 
 import com.remonado.solitaire.tools.Pile;
 
@@ -19,7 +19,7 @@ public class SolitaireGame {
     FoundationDeck lastFoundationUpdated;
     DrawPile drawPile;
     WastePile wastePile;
-    private Pile<Movement> movementPile;
+   // private Pile<Movement> movementPile;
     private FoundationDeck ultimoFoundModificado = null;
 
     public SolitaireGame() {
@@ -27,7 +27,7 @@ public class SolitaireGame {
         wastePile = new WastePile();
         createTableaux();
         createFoundations();
-        movementPile = new Pile<>(300);
+     //   movementPile = new Pile<>(300);
         //wastePile.addCartas(drawPile.retirarCartas());
     }
 
@@ -98,7 +98,7 @@ public class SolitaireGame {
                         fuente.verUltimaCarta().makeFaceUp();
                         seVolteoCartaAnt = true;
                     }
-                    movementPile.push(new MovementT2T(fuente,destino,seVolteoCartaAnt,cartas));
+                  //  movementPile.push(new MovementT2T(fuente,destino,seVolteoCartaAnt,cartas));
                     System.out.println("Se creo un movimiento de tipo T2T");
                     movimientoRealizado = true;
                 }
@@ -131,7 +131,7 @@ public class SolitaireGame {
                 }
             }
             fuente.removerUltimaCarta();
-            movementPile.push(new MovementT2F(fuente, lastFoundationUpdated,seVolteoCartaAnt));
+          //  movementPile.push(new MovementT2F(fuente, lastFoundationUpdated,seVolteoCartaAnt));
             System.out.println("Se creo un movimiento de tipo T2F");
             movimientoRealizado = true;
         }
@@ -151,22 +151,22 @@ public class SolitaireGame {
         if (moveCartaToTableau(carta, tableau)) {
             // si es movimiento válido, elimina la carta de la pila
             carta = wastePile.getCarta();
-            movementPile.push(new MovementW2T(wastePile,tableau));
+           // movementPile.push(new MovementW2T(wastePile,tableau));
             System.out.println("Se creo un movimiento de tipo W2T");
             movimientoRealizado = true;
         }
         return movimientoRealizado;
     }
 
-    /**
-     * Regresa el ulrimo movimiento
-     *
-     *
-     */
-    public void undo(){
-        Movement m = movementPile.pop();
-        if(m!=null)m.undo();
-    }
+//    /**
+//     * Regresa el ulrimo movimiento
+//     *
+//     *
+//     */
+//    public void undo(){
+//        Movement m = movementPile.pop();
+//        if(m!=null)m.undo();
+//    }
 
     /**
      * Tomar una carta de Waste y ponerla en una de las Foundations.
@@ -181,7 +181,7 @@ public class SolitaireGame {
         if (moveCartaToFoundation(carta)) {
             // si es movimiento válido, elimina la carta de la pila
             carta = wastePile.getCarta();
-            movementPile.push(new MovementW2F(wastePile, lastFoundationUpdated));
+         //   movementPile.push(new MovementW2F(wastePile, lastFoundationUpdated));
             System.out.println("Se creo un movimiento de tipo W2F");
             movimientoRealizado = true;
         }

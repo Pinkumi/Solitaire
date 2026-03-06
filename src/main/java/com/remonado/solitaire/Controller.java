@@ -18,10 +18,6 @@ public class Controller {
 
     }
 
-    public void undo(){
-        game.undo();
-        gui.drawAll();
-    }
 
     /**
      * Coloca la carga desplazada en el elemento en el que se deposito

@@ -22,7 +22,7 @@ public class SolitaireGUI extends BorderPane {
     private BorderPane paneTop;
     private StackPane root;
     private Pane animMask;
-    private ImageView undoBttn;
+   // private ImageView undoBttn;
     private Main main;
     public SolitaireGUI(Main main) { //Mando el main (Esta mal) para actualizar con el menu (Lo cambiare para la siguiente practica)
         this.main = main;
@@ -52,11 +52,11 @@ public class SolitaireGUI extends BorderPane {
         paneMiddle = new Pane();
         paneBottom = new Pane();
         paneFoundation = new Pane();
-        undoBttn = new ImageView(new Image("file:src/main/resources/com/remonado/solitaire/Assets/Images/undo.png"));;
-        undoBttn.setFitWidth(75);
-        undoBttn.setFitHeight(75);
-        //undoBttn.setGraphic(imgUndo);
-        undoBttn.getStyleClass().add("menuButton");
+//        undoBttn = new ImageView(new Image("file:src/main/resources/com/remonado/solitaire/Assets/Images/undo.png"));;
+//        undoBttn.setFitWidth(75);
+//        undoBttn.setFitHeight(75);
+//        //undoBttn.setGraphic(imgUndo);
+//        undoBttn.getStyleClass().add("menuButton");
     }
     // muestro la pantalla de win (lo cambiare al controller)
     public void gameOver(){
@@ -150,8 +150,8 @@ public class SolitaireGUI extends BorderPane {
         paneDraw.getChildren().add(wasteView);
         paneDraw.getChildren().add(drawView);
         //undoBttn.setLayoutX((int)(Screen.getPrimary().getBounds().getWidth()/6 - 140));
-        undoBttn.setLayoutY(50);
-        paneDraw.getChildren().add(undoBttn);
+//        undoBttn.setLayoutY(50);
+//        paneDraw.getChildren().add(undoBttn);
         paneTop.getChildren().add(paneDraw);
         paneTop.setPrefHeight(250);
         paneFoundation.setLayoutX((int)(Screen.getPrimary().getBounds().getWidth()/2 - paneFoundation.getWidth()/2));
@@ -176,7 +176,7 @@ public class SolitaireGUI extends BorderPane {
         wasteView = new WasteView(solitaireGame.getWastePile(), control);
         drawView = new DrawView(solitaireGame.getDrawPile(), control);
         drawView.setButton();
-        undoBttn.setOnMouseClicked(e -> control.undo());
+//        undoBttn.setOnMouseClicked(e -> control.undo());
 
 
     }
